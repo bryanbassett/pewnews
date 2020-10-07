@@ -12,23 +12,24 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+    .copy('resources/images/*', 'public/images')
     .postCss('resources/css/app.css', 'public/css', [
-        //
+        require('postcss-import'),
+        require('tailwindcss'),
     ]);
-
-if (mix.inProduction()) {
-    mix.version();
-} else {
-    mix.browserSync(
-        {
-            open: 'external',
-            host: 'pewnews.test',
-            proxy: {
-                target: 'https://pewnews.test',
-                ws: true
+    if (mix.inProduction()) {
+        mix.version();
+    } else {
+        mix.browserSync(
+            {
+                open: 'external',
+                host: 'pewnews.test',
+                proxy: {
+                    target: 'https://pewnews.test',
+                    ws: true
+                }
+    
             }
-
-        }
-    );
-}
+        );
+    }
     
