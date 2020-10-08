@@ -16,7 +16,6 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-            
             $request->validate([
                 'articleName' => 'required|string|min:10',
                 'articleImg'               => 'required|active_url',
@@ -34,15 +33,9 @@ class ArticleController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Articles  $articles
-     * @return \Illuminate\Http\Response
-     */
     public function show(Articles $articles)
     {
-
+        return $articles->all();
     }
 
     public function update(Request $request)
@@ -54,16 +47,12 @@ class ArticleController extends Controller
         $articles->save();
         return 'good';
     }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Articles  $articles
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Articles $articles)
-    {
-        //
+
+    public function deletearticle(Request $request){
+        $articles = new Articles;
+        return $articles->deleteArticle($request->id);
     }
+
 
     public function getmyarticles(Articles $articles){
         return $articles->where('user_id',auth()->user()->id)->get();

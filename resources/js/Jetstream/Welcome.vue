@@ -2,15 +2,31 @@
     <div>
         <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
             <div>
-                <img src="/images/pnlogo.png" class="inline-block h-12 w-auto" /> <div class="inline-block text-3xl"> Welcome to Pew News </div>
+                <div class="inline-block text-3xl"> Welcome to the Pew News Dashboard</div>
             </div>
             <div class="mt-8 text-2xl">
                My Articles:
             </div>
             <div class="bg-gray-200 bg-opacity-25 ">
-            <div v-for="article in myArticles" :key="article.id" >
-                    <div :key="article.id">{{article.name}} - <button class="inline-block" v-on:click.prevent="editArticle(article.id)">Edit</button></div>
-            </div>
+                <table class="table-auto">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Title</th>
+                            <th class="px-4 py-2">Edit</th>
+                            <th class="px-4 py-2">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="article in myArticles" :key="article.id" >
+                            <td class="border px-4 py-2"><a :href="'/articles/'+article.id"> {{article.name}} </a></td>
+                            <td class="border px-4 py-2"><button class="inline-block" v-on:click.prevent="editArticle(article.id)">Edit</button></td>
+                            <td class="border px-4 py-2"><button class="inline-block" v-on:click.prevent="deleteArticle(article.id)">Delete</button></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+ 
             </div>
             <div class="mt-8 text-2xl">
                 Write an article:
@@ -79,7 +95,7 @@
 
             },
             getMyArticles: function(id){
-                axios.get("/articles/my",{id:id})
+                axios.get("/myarticles",{id:id})
                                 .then(response => this.myArticlesGet(response.data) )
             },
             myArticlesGet: function(data){
@@ -99,6 +115,15 @@
                 }
             
             )},
+            deleteArticle: function(articleid){
+                var articles = this.myArticles;
+                var thisser = this;
+                var confirmed = window.confirm("Are you sure you want to delete this article?")
+                if(confirmed){
+                    axios.post("/deletearticle",{id:articleid})
+                        .then(location.reload())
+                }
+            },
         },
         data() {
             return {

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Models\Articles;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,23 +16,30 @@ use App\Http\Controllers\ArticleController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $articles = new Articles;
+    return view('articles', [
+        'articles' => $articles->getArticles()
+    ]);
+
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia\Inertia::render('Dashboard');
 })->name('dashboard');
 
-//viewing single article
-//Route::get('article/{articles}',[ArticleController::class, 'show']);
 
-//creating article
-//Route::post('articles',[ArticleController::class, 'articles.store']);
-//Route::post('articles/store', 'ArticlesController@store')->name('articles.store');
-//->middleware('auth', 'verified')
-//Route::get('get_my_articles', 'ArticleController@getmyarticles')->name('getmy.article.get');
-//Route::post('articles', 'ArticleController@store')->name('savearticle');
-Route::get('articles/my', [ArticleController::class, 'getmyarticles']);
-//Route::get('myarticles', 'ArticleController@getmyarticles')->name('getmy.articles');
-//Route::get('get_my_articles', [ArticleController::class, 'getmyarticles'])->name('getmyarticles');
-Route::resource('articles', ArticleController::class);
+
+
+Route::get('/articles/{articles_id}', function ($articles_id) {
+    $articles = new Articles;
+    return view('article', [
+        'article' => $articles->getArticle($articles_id)
+    ]);
+})->name('article.show');
+
+
+Route::get('/myarticles', [ArticleController::class, 'getmyarticles']);
+Route::post('/deletearticle',[ArticleController::class, 'deletearticle']);
+
+
+Route::resource('articles', ArticleController::class)->except(['destroy']);

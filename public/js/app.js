@@ -2800,6 +2800,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2840,7 +2856,7 @@ __webpack_require__.r(__webpack_exports__);
     getMyArticles: function getMyArticles(id) {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/articles/my", {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("/myarticles", {
         id: id
       }).then(function (response) {
         return _this.myArticlesGet(response.data);
@@ -2861,6 +2877,17 @@ __webpack_require__.r(__webpack_exports__);
           thisser.articleId = value.id;
         }
       });
+    },
+    deleteArticle: function deleteArticle(articleid) {
+      var articles = this.myArticles;
+      var thisser = this;
+      var confirmed = window.confirm("Are you sure you want to delete this article?");
+
+      if (confirmed) {
+        axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("/deletearticle", {
+          id: articleid
+        }).then(location.reload());
+      }
     }
   },
   data: function data() {
@@ -35717,31 +35744,57 @@ var render = function() {
           _vm._v("\n           My Articles:\n        ")
         ]),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "bg-gray-200 bg-opacity-25 " },
-          _vm._l(_vm.myArticles, function(article) {
-            return _c("div", { key: article.id }, [
-              _c("div", { key: article.id }, [
-                _vm._v(_vm._s(article.name) + " - "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "inline-block",
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.editArticle(article.id)
-                      }
-                    }
-                  },
-                  [_vm._v("Edit")]
-                )
-              ])
-            ])
-          }),
-          0
-        ),
+        _c("div", { staticClass: "bg-gray-200 bg-opacity-25 " }, [
+          _c("table", { staticClass: "table-auto" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.myArticles, function(article) {
+                return _c("tr", { key: article.id }, [
+                  _c("td", { staticClass: "border px-4 py-2" }, [
+                    _c("a", { attrs: { href: "/articles/" + article.id } }, [
+                      _vm._v(" " + _vm._s(article.name) + " ")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "border px-4 py-2" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "inline-block",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.editArticle(article.id)
+                          }
+                        }
+                      },
+                      [_vm._v("Edit")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "border px-4 py-2" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "inline-block",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.deleteArticle(article.id)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  ])
+                ])
+              }),
+              0
+            )
+          ])
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "mt-8 text-2xl" }, [
           _vm._v("\n            Write an article:\n        ")
@@ -35894,13 +35947,22 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("img", {
-        staticClass: "inline-block h-12 w-auto",
-        attrs: { src: "/images/pnlogo.png" }
-      }),
-      _vm._v(" "),
       _c("div", { staticClass: "inline-block text-3xl" }, [
-        _vm._v(" Welcome to Pew News ")
+        _vm._v(" Welcome to the Pew News Dashboard")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "px-4 py-2" }, [_vm._v("Title")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "px-4 py-2" }, [_vm._v("Edit")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "px-4 py-2" }, [_vm._v("Delete")])
       ])
     ])
   }
